@@ -1,4 +1,6 @@
 from sqlmodel import SQLModel, Session, create_engine
+from app.models.evidence import Evidence
+from app.models.finding import Finding
 
 DATABASE_URL = "sqlite:///blue_team.db"
 
