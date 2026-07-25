@@ -10,11 +10,14 @@ from app.schemas.investigation import (
 
 router = APIRouter(prefix="/investigations", tags=["Investigations"])
 
-
 investigations = []
 
-
-@router.post("/", response_model=InvestigationRead)
+@router.post("/", 
+    summary="Create a new investigation",
+    description="Creates a new security investigation that will contain uploaded evidence, analysis findings, and generated reports.",
+    responses={
+    201: {"description": "Investigation created"}}
+)
 def create_investigation(
     investigation: InvestigationCreate,
     session: Session = Depends(get_session)
@@ -32,7 +35,11 @@ def create_investigation(
     return db_investigation
 
 
-@router.get("/", response_model=list[InvestigationRead])
+@router.get("/",summary="List investigations",
+    description="Retrives all investigations.",
+    responses={
+    200:{"description": "List of investigations retrieved successfully"}}
+)
 def get_investigations(
     session: Session = Depends(get_session)
 ):
@@ -42,8 +49,11 @@ def get_investigations(
     ).all()
 
 
-@router.get("/{investigation_id}",
-            response_model=InvestigationRead)
+@router.get("/",summary="Retrieve an investigation",
+     responses={
+     200: {"description": "Investigation found"},
+     404: {"description": "Investigation not found"}}
+)
 def get_investigation(
     investigation_id: int,
     session: Session = Depends(get_session)

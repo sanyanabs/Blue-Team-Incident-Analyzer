@@ -5,12 +5,18 @@ from app.database.database import get_session
 from app.models.evidence import Evidence
 
 
-router = APIRouter()
+router = APIRouter(prefix="/evidence",tags=["Evidence"])
 
 evidence_records = []
 
 
-@router.post("/investigations/{investigation_id}/upload")
+@router.post("/",
+    summary="Upload investigation evidence",
+    description="Uploads an authentication log file that will be parsed and analysed.",
+    responses={
+        201: {"description": "File Uploaded"}}
+        
+)
 async def upload_log(
     investigation_id: int,
     log_source: str = Form(...),
@@ -39,10 +45,14 @@ async def upload_log(
     session.commit()
     session.refresh(evidence)
 
-
     return evidence
 
 
-@router.get("/evidence")
+@router.get("/",
+    summary="Get evidence",
+    responses={
+        200: {"description": "Evidence found"},
+        404: {"description": "Evidence not found"}}
+)
 def get_evidence():
     return evidence_records

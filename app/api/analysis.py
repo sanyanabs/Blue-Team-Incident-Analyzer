@@ -11,13 +11,12 @@ from app.reports.pdf_generator import generate_pdf
 from fastapi.responses import FileResponse
 
 
-router = APIRouter(
-    prefix="/analysis",
-    tags=["Analysis"]
-)
+router = APIRouter(prefix="/analysis",tags=["Analysis"])
 
 
-@router.post("/investigations/{investigation_id}/analyze")
+@router.post("/",
+    summary="Analyse uploaded evidence",
+    description="Parses uploaded authentication logs, detects suspicious activities and stores findings.")
 def analyze(
     investigation_id: int,
     session: Session = Depends(get_session)
@@ -76,7 +75,7 @@ def analyze(
         "findings": saved_findings
     }
 
-@router.get("/investigations/{investigation_id}/findings")
+@router.get("/",summary="Retrieve investigation findings")
 def get_findings(
     investigation_id: int,
     session: Session = Depends(get_session)
@@ -103,7 +102,7 @@ def get_findings(
         "findings": findings
     }
 
-@router.get("/investigations/{investigation_id}/report")
+@router.get("/",summary="Generate investigation report")
 def get_report(
     investigation_id: int,
     session: Session = Depends(get_session)
@@ -140,7 +139,7 @@ def get_report(
         "report": report
     }
 
-@router.get("/investigations/{investigation_id}/report/pdf")
+@router.get("/",summary="Download investigation report (PDF)")
 def download_report_pdf(
     investigation_id: int,
     session: Session = Depends(get_session)
